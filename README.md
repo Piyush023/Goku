@@ -55,9 +55,12 @@ RTMP Point - RTMP is a TCP-based protocol designed to maintain persistent, low-l
 }
 User Feed is captured from the client side in form of a stream - (STREAM TYPE) and We need to send this stream to the Node.JS server via TCP - Transmission Control Protocol - which will then send this stream to the ffmpeg and then to the RTMP for the platform distribution. Now the problem is that we can't send the captured stream to Node Serve in stream format via TCP and also RTMP also don't work on stream format (For Video Transmissions we use the WebRTC Protocol to process the from one server to another video does not get transfered over the TCP). So for this to work, we have to convert that stream to a binary data form and then send it to the server via TCP and also we need WebSocket/Socket.IO for Real Time Communication between the stream, server, ffmpeg and then in the last RTMP.
 
+We need to install Ffmpeg on local for transferring the data to Ffmpeg to send it to further to RTMP, for Ffmpeg we are using the Docker for transferring the binary to ffmpeg and then to RTMP server.
+
 Topics TO Learn About - 
 1. React.JS / Next.JS
 2. Express.JS / Node.JS and Servers
 3. Socket.IO
 4. Ffmpeg
 5. RTMP
+6. Docker
