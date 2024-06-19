@@ -1,12 +1,13 @@
+version: '3'
 services:
   app:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: Dockerfile
     volumes:
-      - /Users/piyushkhurana/Projects/Frontend_Project/videoStreamingWebApp/video_streaming_web_app
+      - ./:/app
     ports:
-      - 3000:3000
+      - "3000:3000"
     command: ["nodemon", "server.js"]
     environment:
       - NODE_ENV=development

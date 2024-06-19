@@ -1,5 +1,5 @@
 'use client';
-import React, { createRef, useEffect, useState } from 'react';
+import React, { createRef, useCallback, useEffect, useState } from 'react';
 // import io from 'socket.io';
 import io from 'socket.io-client';
 
@@ -14,17 +14,28 @@ const Home = () => {
 
   // When ever we install or create the socket IO instance we have a specific Socket IO Path - '/socket.io/socket.io.js'
 
-  const startFeedService = (camStream: MediaStream) => {
-    const mediaRecorder = new MediaRecorder(camStream, {
-      audioBitsPerSecond: 128000,
-      videoBitsPerSecond: 250000,
-    });
-    mediaRecorder.ondataavailable = (ev) => {
-      console.log('Media Data Available', ev.data);
-      socket.emit('binaryStream', ev.data);
-    };
-    mediaRecorder.start(25);
-  };
+  const startFeedService = useCallback(
+    (camStream: MediaStream) => {
+      const mediaRecorder = new MediaRecorder(camStream, {
+        audioBitsPerSecond: 128000,
+        videoBitsPerSecond: 250000,
+      });
+      console.log(startFeed, 'mediaRecorder.pause();');
+
+      if (startFeed) {
+        mediaRecorder.ondataavailable = (ev) => {
+          console.log('Media Data Available', ev.data);
+          socket.emit('binaryStream', ev.data);
+        };
+        mediaRecorder.start(25);
+      } else {
+        console.log('stop');
+        mediaRecorder.stop();
+        socket.close();
+      }
+    },
+    [startFeed, socket],
+  );
 
   useEffect(() => {
     const camData = async () => {
@@ -60,6 +71,14 @@ const Home = () => {
         }}
       >
         Start
+      </button>
+      <button
+        onClick={() => {
+          setStartFeed(false);
+          startFeedService(camFeed!);
+        }}
+      >
+        End
       </button>
     </div>
   );

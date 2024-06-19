@@ -2,6 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import next from 'next';
 import { Server as SocketIO } from 'socket.io';
+import { spawn } from 'child_process';
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -37,16 +38,35 @@ app.prepare().then(() => {
     '-ar', 128000 / 4,
     '-f', 'flv',
     // This is the youtube Live Link with the User API-KEY - make it dynamic. and also we can make it a file and record and download the whole file.
-    `rtmp://a.rtmp.youtube.com/live2/dcfx-m7v2-j248-3185-9207`,
+    `rtmp://a.rtmp.youtube.com/live2/562j-09ca-v2eq-6bdh-129f`,
   ];
 
   // We need to run this through the docker compose file to make it work.
   const ffmpegProcess = spawn('ffmpeg', options);
 
+  // Callback when there is some data in the stream output.
+  ffmpegProcess.stdout.on('data', (data) => {
+    console.log(`ffmpeg stdout: ${data}`);
+  });
+
+  // Callback when there is some error in the stream.
+  ffmpegProcess.stderr.on('data', (data) => {
+    console.error(`ffmpeg stderr: ${data}`);
+  });
+
+  // Callback when there is end Event in the stream.
+  ffmpegProcess.on('close', (code) => {
+    console.log(`ffmpeg process exited with code ${code}`);
+  });
+
   io.on('connection', socket => {
     console.log('Socket Connected', socket.id);
     // When ever the data of Stream is coming from the client we will send it to the server
-    socket.on('binaryStream', () => {
+    socket.on('binaryStream', (stream) => {
+      // Now we are doing is to pass the stream from the client to the server using the ffmpeg 
+      ffmpegProcess.stdin.write(stream, (e) => {
+        console.log(e)
+      })
       console.log('Socket Incoming');
     });
   });
