@@ -1,10 +1,8 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a Next.js project bootstrapped with create-next-app.
 
-## Getting Started
-
+Getting Started
 First, run the development server:
 
-```bash
 npm run dev
 # or
 yarn dev
@@ -12,55 +10,153 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
+Open http://localhost:3000 with your browser to see the result.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You can start editing the page by modifying app/page.tsx. The page auto-updates as you edit the file.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project uses next/font to automatically optimize and load Inter, a custom Google Font.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
+Learn More
 To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Next.js Documentation - learn about Next.js features and API.
+Learn Next.js - an interactive Next.js tutorial.
+You can check out the Next.js GitHub repository - your feedback and contributions are welcome!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Deploy on Vercel
+The easiest way to deploy your Next.js app is to use the Vercel Platform from the creators of Next.js.
 
-## Deploy on Vercel
+Check out our Next.js deployment documentation for more details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Stream_Yard_Clone
+Tech Stack
+Node.JS
+Ffmpeg
+Docker
+Arch and Summary
+Live Streaming Solution Documentation
+Overview
+This documentation outlines the setup and components for a live streaming solution that captures video and audio from a client's browser, processes it using ffmpeg, and streams it to platforms like YouTube and Facebook using RTMP. The solution consists of a client-side application (built with React or Next.js) and a server-side application (built with Node.js and Express).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# Stream_Yard_Clone
+Tech Stack
+Frontend
+React.js / Next.js: For building the user interface and managing the client-side logic.
+Browser APIs: To access the camera and microphone.
+Backend
+Node.js: For server-side scripting and handling incoming media streams.
+Express.js: For creating the server and managing routes and middleware.
+Socket.IO: For real-time, bidirectional communication between the client and server.
+Child Process (Node.js): To spawn ffmpeg processes for media stream processing.
+Media Processing
+FFmpeg: A powerful CLI tool for video and audio processing, used to encode, decode, transcode, mux, demux, stream, filter, and play multimedia files.
+Streaming Protocol
+RTMP (Real-Time Messaging Protocol): A protocol for streaming audio, video, and data over the Internet.
+Containerization
+Docker: For containerizing the FFmpeg application to ensure consistent environments across different systems.
+Components and Workflow
+Client-Side (React/Next.js)
+Browser Access:
 
-## Tech Stack
-1. Node.JS
-2. Ffmpeg
-3. Docker  
+Access the camera and microphone using the browser's API. Display a "Start Streaming" button to initiate the streaming process.
 
-## Arch and Summary - 
-First will be the Client (Google Chrome or any Browser) - Based on React or Next.JS - FrontEnd - Camera and Mic Access and Start Streaming Button - {
-    This will be the button to allow the user to go live on the connected Platform {RTM Connected Platform - ? - Youtube, Facebook} 
-}
-Second will be the Server (Node.JS) - Backend - The stream will be sent to Node.JS server and a Child process will be started which will run the CLI ffmpeg command to process the video and audio.
-Ffmpeg - CLI Tool for Processing any type of operations on Videos. - (Streaming, Upscale, Downscale)
-Now Node.JS Server will throw the video stream to the RTMP Point via ffmpeg
-RTMP Point - RTMP is a TCP-based protocol designed to maintain persistent, low-latency connections — and by extension, smooth streaming experiences. RTMP - Real Time Messaging Protocol(TCP Protocol) - {
-    Real-Time Messaging Protocol (RTMP) is a communication protocol that allows for the streaming of data, video, and audio over the internet. It's used for live television, video streaming, and internet phone services. RTMP breaks large data files into small packets, which are then sent one by one from an encoder and put back together for the viewer.
-    This is the server where we will send our processed video to multiple streaming platforms like Youtube, Facebook etc.
-    Each Streaming Platform will have RTMP of there own and our stream will be thrown to them and then it will get processed and then it will be shown on that platform and it will handle all the operations to show that stream to other people.
-}
-User Feed is captured from the client side in form of a stream - (STREAM TYPE) and We need to send this stream to the Node.JS server via TCP - Transmission Control Protocol - which will then send this stream to the ffmpeg and then to the RTMP for the platform distribution. Now the problem is that we can't send the captured stream to Node Serve in stream format via TCP and also RTMP also don't work on stream format (For Video Transmissions we use the WebRTC Protocol to process the from one server to another video does not get transfered over the TCP). So for this to work, we have to convert that stream to a binary data form and then send it to the server via TCP and also we need WebSocket/Socket.IO for Real Time Communication between the stream, server, ffmpeg and then in the last RTMP.
+Streaming Button:
 
-We need to install Ffmpeg on local for transferring the data to Ffmpeg to send it to further to RTMP, for Ffmpeg we are using the Docker for transferring the binary to ffmpeg and then to RTMP server.
+When clicked, the button will start capturing the media stream from the user's camera and microphone. The captured media stream will be sent to the Node.js server for processing.
 
-Topics TO Learn About - 
-1. React.JS / Next.JS
-2. Express.JS / Node.JS and Servers
-3. Socket.IO
-4. Ffmpeg
-5. RTMP
-6. Docker
+Server-Side (Node.js with Express)
+Media Stream Reception:
+
+The server receives the media stream from the client. It uses Socket.IO for real-time communication to handle the incoming stream data.
+
+Processing with FFmpeg:
+
+A child process is spawned to run ffmpeg with specific options to process the video and audio streams. FFmpeg options include setting the codec, bitrate, frame rate, and other necessary parameters for streaming.
+
+RTMP Streaming:
+
+The processed media stream is forwarded to an RTMP endpoint. RTMP (Real-Time Messaging Protocol) is used for streaming the processed media to platforms like YouTube and Facebook.
+
+Technical Details
+RTMP (Real-Time Messaging Protocol)
+RTMP is a TCP-based protocol designed for low-latency connections, making it ideal for live streaming. It breaks large data files into small packets, which are sent sequentially and reassembled by the receiver.
+
+WebSockets/Socket.IO
+WebSockets, facilitated by Socket.IO, enable real-time, bidirectional communication between the client and server. This is essential for streaming applications where latency and real-time data transmission are critical.
+
+Docker and FFmpeg
+Docker is used to containerize ffmpeg, ensuring consistent environments across different systems. FFmpeg is a powerful CLI tool for video and audio processing, used here to handle streaming, upscaling, and downscaling operations.
+
+Implementation
+Client-Side Code (React/Next.js)
+Capture Media Stream:
+
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+  .then(stream => {
+    // Handle the stream
+  })
+  .catch(error => {
+    console.error('Error accessing media devices.', error);
+  });
+Start Streaming Button:
+
+<button onClick={startStreaming}>Start Streaming</button>
+
+const startStreaming = () => {
+  // Capture the stream and send it to the server
+};
+Server-Side Code (Node.js with Express)
+Setup Express and Socket.IO:
+
+import express from 'express';
+import { createServer } from 'http';
+import { Server as SocketIO } from 'socket.io';
+import { spawn } from 'child_process';
+
+const app = express();
+const server = createServer(app);
+const io = new SocketIO(server);
+FFmpeg Process and RTMP:
+
+const options = [
+  '-i', '-',
+  '-c:v', 'libx264',
+  '-preset', 'ultrafast',
+  '-tune', 'zerolatency',
+  '-r', '25',
+  '-g', '50',
+  '-keyint_min', '25',
+  '-crf', '25',
+  '-pix_fmt', 'yuv420p',
+  '-sc_threshold', '0',
+  '-profile:v', 'main',
+  '-level', '3.1',
+  '-c:a', 'aac',
+  '-b:a', '128k',
+  '-ar', '32000',
+  '-f', 'flv',
+  'rtmp://a.rtmp.youtube.com/live2/your-stream-key'
+];
+
+const ffmpegProcess = spawn('ffmpeg', options);
+
+io.on('connection', socket => {
+  socket.on('binaryStream', data => {
+    ffmpegProcess.stdin.write(data);
+  });
+});
+Start Server:
+
+server.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+Topics to Learn
+React.js / Next.js: For building the client-side application.
+Express.js / Node.js: For creating the server-side application.
+Socket.IO: For real-time communication between the client, server, and ffmpeg.
+FFmpeg: For processing video and audio streams.
+RTMP: For streaming the processed media to platforms like YouTube and Facebook.
+Docker: For containerizing ffmpeg and managing its environment.
+Conclusion
+This documentation provides an overview of the live streaming solution, detailing the client and server components, the technologies used, and the necessary setup. By following this guide, you can create a robust system for live streaming video and audio to various platforms using modern web technologies and tools.
+
+This should provide a clear and structured format for the text and code parts.
