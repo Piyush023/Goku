@@ -65,7 +65,7 @@ app.prepare().then(() => {
     socket.on('binaryStream', (stream) => {
       // Now we are doing is to pass the stream from the client to the server using the ffmpeg 
       ffmpegProcess.stdin.write(stream, (e) => {
-        console.log(e)
+        console.log(e, 'e')
       })
       console.log('Socket Incoming');
     });

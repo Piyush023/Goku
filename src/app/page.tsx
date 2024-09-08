@@ -7,6 +7,7 @@ const Home = () => {
   const [camFeed, setCamFeed] = useState<MediaStream | null>(null);
   const [startFeed, setStartFeed] = useState<boolean>(false);
   const myVideo = createRef<HTMLVideoElement>();
+  // const socket = io(process.env.REACT_APP_SOCKET_IO_URL || 'http://localhost:3000');
   const socket = io('http://localhost:3000');
   socket.on('connect', () => {
     console.log('Connected to server');
